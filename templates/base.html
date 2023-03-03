@@ -13,7 +13,7 @@
         <nav class="navigation">
             <a href="{% url 'home' %}"><button class="btn btn-info">Home</button></a>
             <a href="{% url 'add-product' %}"><button class="btn btn-info">Add Products</button></a>
-            <a href=""><button class="btn btn-info">View Products</button></a>
+            <a href="{% url 'products' %}"><button class="btn btn-info">View Products</button></a>
             <a href="{% url 'register' %}"><button class="btn btn-info">Register</button></a>
             <a href="{% url 'login' %}"><button class="btn btn-info">Login</button></a>
             <a href="{% url 'logout' %}"><button class="btn btn-info">Logout</button></a>
@@ -23,7 +23,7 @@
 </section>
 {% if messages %}
     {% for message in messages %}
-       <p class="text-success text-center"> {{ message }}</p>
+        <p class="text-success text-center"> {{ message }}</p>
     {% endfor %}
 {% endif %}
 {% block content %}
