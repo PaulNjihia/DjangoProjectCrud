@@ -10,6 +10,7 @@
                     <th>Price</th>
                     <th>Delete</th>
                     <th>Update</th>
+                    <th>Payment</th>
                 </tr>
                 {% for product in products %}
                 <tr>
@@ -18,6 +19,7 @@
                     <td>{{ product.prod_price }}</td>
                     <td><a href="/delete-product/{{ product.id }}" class="text-danger">Delete</a></td>
                     <td><a href="/update-product/{{ product.id }}" class="text-success">Update</a></td>
+                    <td><a href="/pay/{{ product.id }}" class="text-warning">Pay via Mpesa</a></td>
                 </tr>
                 {% endfor %}
             </table>
