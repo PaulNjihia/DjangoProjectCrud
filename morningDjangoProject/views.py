@@ -1,8 +1,26 @@
+from __future__ import unicode_literals
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from .forms import UserRegistrationForm
 from django.contrib.auth.decorators import login_required
 from .models import Product
+#Start of mpesa related imports
+
+from django_daraja.mpesa import utils
+from django.http import HttpResponse, JsonResponse
+from django.views.generic import View
+from django_daraja.mpesa.core import MpesaClient
+from decouple import config
+from datetime import datetime
+#End of mpesa related imports
+
+#Start of mpesa instances and variable
+cl = MpesaClient()
+stk_push_callback_url = ""
+b2c_callback_url = ""
+#End of mpesa variables
+
+
 
 def register(request):
     if request.method == "POST":
@@ -78,6 +96,12 @@ def update_product(request,id):
 
     return render(request, 'update-product.html', {'product': product})
 
+def auth_sucess(request):
+    token = cl.access_token()
+    return JsonResponse(token, safe=False)
+
+
+
 @login_required
 def payment(request, id):
     #select the product being paid
@@ -86,7 +110,14 @@ def payment(request, id):
     if request.method == "POST":
         phone_number = request.POST.get('nambari')
         amount = request.POST.get('bei')
-    #proceed with the payment by launching mpesa STK
+        amount = int(amount)
+        #proceed with the payment by launching mpesa STK
+        account_ref = 'TR001'
+        transaction_description = 'Payment for a product'
+        stk = cl.stk_push(phone_number, amount, account_ref, transaction_description, stk_push_callback_url)
+        mpesa_response = stk.response_description
+        messages.success(request, mpesa_response)
+        return redirect('pay-via-mpesa')
     return render(request, 'payment.html', {'product':product})
 
 
