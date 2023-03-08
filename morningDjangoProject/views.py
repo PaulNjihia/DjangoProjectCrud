@@ -16,7 +16,7 @@ from datetime import datetime
 
 #Start of mpesa instances and variable
 cl = MpesaClient()
-stk_push_callback_url = ""
+stk_push_callback_url = 'https://api.darajambili.com/express-payment'
 b2c_callback_url = ""
 #End of mpesa variables
 
@@ -112,12 +112,12 @@ def payment(request, id):
         amount = request.POST.get('bei')
         amount = int(amount)
         #proceed with the payment by launching mpesa STK
-        account_ref = 'TR001'
+        account_ref = 'Nikitu Enterprises'
         transaction_description = 'Payment for a product'
         stk = cl.stk_push(phone_number, amount, account_ref, transaction_description, stk_push_callback_url)
         mpesa_response = stk.response_description
         messages.success(request, mpesa_response)
-        return redirect('pay-via-mpesa')
+        return JsonResponse(mpesa_response, safe=False)
     return render(request, 'payment.html', {'product':product})
 
 
